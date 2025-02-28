@@ -1,20 +1,52 @@
+/* 🌟 General Styles */
 body {
-    font-family: Arial, sans-serif;
-  }
-  
-  nav {
-    background: #333;
-    color: #fff;
-    padding: 10px;
-  }
-  
-  .container {
-    margin: 20px;
-  }
-  
-  .sensor-block {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 10px;
-  }
-  
+  font-family: 'Arial', sans-serif;
+}
+
+/* 🌟 Dark Mode */
+.dark-mode {
+  background-color: #121212 !important;
+  color: #f1f1f1 !important;
+}
+.dark-mode .card {
+  background-color: #1e1e1e !important;
+  color: #f1f1f1 !important;
+}
+.dark-mode .btn {
+  background-color: #ffb74d !important;
+  color: #121212 !important;
+}
+.dark-mode .navbar {
+  background-color: #333 !important;
+}
+
+/* 🌟 Sensor Data Card */
+.card {
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 🌟 Load Button */
+.btn-primary {
+  padding: 12px 20px;
+  font-size: 18px;
+  border-radius: 8px;
+  transition: all 0.3s ease-in-out;
+}
+.btn-primary:hover {
+  background-color: #ff5722;
+  transform: scale(1.05);
+}
+
+/* 🌟 Chart Styling */
+.chart-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+canvas {
+  width: 100% !important;
+  height: 500px !important;
+  display: block;
+}

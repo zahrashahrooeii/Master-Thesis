@@ -1,40 +1,31 @@
-# data_logger.py
 import os
 import csv
 import threading
 
 class CSVDataLogger:
-    """
-    Thread-safe CSV logger that appends sensor readings.
-    """
-
     def __init__(self, csv_file="sensor_log.csv", fieldnames=None):
-        """
-        :param csv_file: path to your CSV log file
-        :param fieldnames: list of column names, e.g. ["timestamp", "temperature", "humidity", "motion", "fan", "light"]
-        """
         self.csv_file = csv_file
-        self.fieldnames = fieldnames if fieldnames else ["timestamp", "temperature", "humidity", "motion", "fan", "light"]
+        self.fieldnames = fieldnames if fieldnames else [
+            "sensor_id", "timestamp", "temperature", "humidity", "motion", "fan", "light"
+        ]
         self._lock = threading.Lock()
 
-        # If file doesn't exist, create and write header
         if not os.path.exists(self.csv_file):
             with open(self.csv_file, mode="w", newline="") as f:
                 writer = csv.DictWriter(f, fieldnames=self.fieldnames)
                 writer.writeheader()
+                print(f"📂 Created new CSV log file: {self.csv_file}")
 
     def log(self, data):
-        """
-        data is a dict matching the fieldnames. e.g.:
-        {
-          "timestamp": "2025-01-26 12:00:00",
-          "temperature": 25.6,
-          "humidity": 60.1,
-          "motion": False,
-          "fan": "OFF",
-          "light": "OFF"
-        }
-        """
-        with self._lock, open(self.csv_file, mode="a", newline="") as f:
-            writer = csv.DictWriter(f, fieldnames=self.fieldnames)
-            writer.writerow(data)
+        if "timestamp" not in data:
+            data["timestamp"] = time.strftime("%Y-%m-%d %H:%M:%S")
+
+        with self._lock:
+            try:
+                print(f"📄 Writing to CSV: {data}")  # Debugging Line
+                with open(self.csv_file, mode="a", newline="") as f:
+                    writer = csv.DictWriter(f, fieldnames=self.fieldnames)
+                    writer.writerow(data)
+                print(f"✅ Logged: {data}")  # Debugging Line
+            except Exception as e:
+                print(f"❌ Error writing to CSV: {e}")
