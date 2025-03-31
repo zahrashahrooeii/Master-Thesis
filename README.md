@@ -16,10 +16,10 @@ The project introduces a Python-based simulation framework designed for IoT-driv
 - **Control logic**: Actuator management (fans, lights) based on sensor thresholds.
 - **Visualization Dashboard**: Interactive Flask-based web application with real-time data display.
 
-This thesis significantly contributes to developing a robust simulation framework supporting real-time control, interactive visualization, and advanced security mechanisms for IoT applications. It lays groundwork for further exploration into machine learning integration and practical IoT deployments.
+This thesis significantly contributes to developing a robust simulation framework supporting real-time control, interactive visualization, and advanced security mechanisms for IoT applications. It lays the groundwork for further exploration into machine learning integration and practical IoT deployments.
 
 ## Repository Content
-- `Master_thesis_UNIPD_Shahroorei.pdf`: Full thesis document
+- `Master_thesis_UNIPD_Shahroorei (1).pdf`: Full thesis document
 
 ## Main Research Objectives
 - Develop scalable real-time IoT data management systems.
