@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="text-center">
+        <h1 class="fw-bold mb-4">🚀 Welcome to Smart IoT Dashboard</h1>
+        <p class="lead">Monitor & control your IoT devices with real-time data.</p>
+
+        <div class="mt-4">
+            <a href="{{ url_for('signup_page') }}" class="btn btn-primary btn-lg mx-2">📝 Sign Up</a>
+            <a href="{{ url_for('login_page') }}" class="btn btn-success btn-lg mx-2">🔑 Log In</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

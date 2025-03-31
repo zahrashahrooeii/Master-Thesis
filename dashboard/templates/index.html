@@ -2,31 +2,65 @@
 {% block content %}
 
 <div class="container">
-    <h2 class="text-center fw-bold my-4">Dashboard</h2>
+    <h2 class="text-center fw-bold my-4">📊 IoT Sensor Dashboard</h2>
 
-    <!-- ✅ Alert Box Container (Dynamically Updated by JavaScript) -->
-    <div id="alertBox" class="container mt-3"></div>
+    <!-- ✅ Row for Two Side-by-Side Cards -->
+    <div class="row justify-content-center">
+        <!-- ✅ Left Card: Sensor Data -->
+        <div class="col-md-5">
+            <div class="card shadow-lg p-4 mb-4">
+                <h4 class="fw-bold text-primary">📡 Sensor Data</h4>
+                <p id="sensor-id">Sensor: --</p>
+                <p id="timestamp">Timestamp: --</p>
+                <p id="temperature">Temperature: --</p>
+                <p id="humidity">Humidity: --</p>
+                <p id="motion">Motion: --</p>
+                <p>
+                    Fan State: <span id="fan-state">--</span>
+                    <button class="btn btn-sm btn-primary" onclick="toggleDevice('fan')">Toggle Fan</button>
+                </p>
+            
+                <p>
+                    Light State: <span id="light-state">--</span>
+                    <button class="btn btn-sm btn-warning" onclick="toggleDevice('light')">Toggle Light</button>
+                </p>
+            </div>
+        </div>
 
+        <!-- ✅ Right Card: Sensor Chart -->
+        <div class="col-md-7">
+            <div class="card shadow-lg p-4 mb-4">
+                <h4 class="text-center text-danger">📈 Sensor Data Chart</h4>
+                <label for="timeframeSelect" class="fw-bold">Select Timeframe:</label>
+                
+                <div class="d-flex align-items-center">
+                    <select id="timeframeSelect" class="form-select w-auto me-2" onchange="fetchHistoricalData(this.value)">
+                        <option value="day">Last 24 Hours</option>
+                        <option value="week">Last 7 Days</option>
+                        <option value="month">Last 30 Days</option>
+                        <option value="year">Last Year</option>
+                    </select>
+                    <button class="btn btn-success btn-sm" onclick="fetchHistoricalData()">📡 Load Data</button>
+                </div>
 
-    <!-- ✅ Sensor Data Card -->
-    <div class="card shadow-lg p-4 mb-4">
-        <h4 class="card-title"><i class="fas fa-satellite"></i> Sensor Data</h4>
-        <div id="sensorDataContainer">
-            <!-- JavaScript will inject sensor data here -->
+                <!-- ✅ Chart Container -->
+                <div class="chart-container mt-3" style="height: 400px;">
+                    <canvas id="sensorChart"></canvas>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- ✅ Historical Data Chart -->
-    <h3 class="text-center my-4">Sensor Data Chart</h3>
-    <div class="text-center">
-        <button class="btn btn-lg btn-primary" onclick="fetchHistoricalData()">
-            <i class="fas fa-database"></i> Load Historical Data
+    <!-- ✅ PDF Download Button -->
+    <div class="text-center mt-4">
+        <button class="btn btn-danger px-4" onclick="downloadPDF()">
+            📄 Download PDF Report
         </button>
     </div>
-
-    <div class="chart-container" style="position: relative; height:500px; width:100%;">
-        <canvas id="sensorChart"></canvas> <!-- Chart.js will use this -->
-    </div>
 </div>
+
+<!-- ✅ Ensure JavaScript is Loaded -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 {% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg p-4 text-center">
+        <h2 class="fw-bold">🔑 Verify Your Account</h2>
+        <p class="text-muted">Enter the OTP sent to your email.</p>
+
+        <form id="otpForm">
+            <input type="hidden" id="email" value="{{ email }}">
+            <div class="mb-3">
+                <input type="text" id="otp" class="form-control" placeholder="Enter OTP" required>
+            </div>
+            <button type="submit" class="btn btn-success w-100">✅ Verify</button>
+        </form>
+
+        <p class="mt-3 text-danger" id="errorMessage"></p>
+        
+        <p id="timer">⏳ OTP expires in <span id="countdown">60</span> seconds</p>
+        <button id="resendBtn" class="btn btn-warning w-100" disabled>🔄 Resend OTP</button>
+    </div>
+</div>
+
+<script>
+let timeLeft = 60;
+const countdownEl = document.getElementById("countdown");
+const resendBtn = document.getElementById("resendBtn");
+
+// Countdown timer for OTP expiration
+const timer = setInterval(() => {
+    timeLeft--;
+    countdownEl.textContent = timeLeft;
+
+    if (timeLeft <= 0) {
+        clearInterval(timer);
+        resendBtn.disabled = false;
+    }
+}, 1000);
+
+// Handle OTP verification
+document.getElementById("otpForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    
+    const email = new URLSearchParams(window.location.search).get("email");
+    const otp = document.getElementById("otp").value;
+
+    fetch("/api/verify_otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, otp })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "success") {
+            alert("✅ OTP Verified! Redirecting to login...");
+            window.location.href = data.redirect;  // ✅ Redirects correctly
+        } else {
+            document.getElementById("errorMessage").innerText = "❌ " + data.message;
+        }
+    })
+    .catch(error => console.error("Error:", error));
+});
+
+
+// Handle OTP Resend
+resendBtn.addEventListener("click", function() {
+    fetch("/api/resend_otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: document.getElementById("email").value })
+    })
+    .then(response => response.json())
+    .then(data => { 
+        alert(data.message); 
+        location.reload();
+    })
+    .catch(error => console.error("Error:", error));
+});
+</script>
+{% endblock %}

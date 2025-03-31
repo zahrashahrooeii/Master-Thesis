@@ -1,0 +1,75 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg p-4 text-center" style="width: 400px;">
+        <h2 class="fw-bold">📝 Sign Up</h2>
+        <p class="text-muted">Create your account to access the IoT dashboard.</p>
+
+        <form id="signupForm">
+            <div class="mb-3">
+                <label class="form-label">Name:</label>
+                <input type="text" id="name" class="form-control" placeholder="Enter your name" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email:</label>
+                <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Password:</label>
+                <input type="password" id="password" class="form-control" placeholder="Enter a strong password" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100" id="signupBtn">🚀 Sign Up</button>
+
+            <div id="loading" class="text-center mt-3" style="display: none;">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p class="text-muted">Processing...</p>
+            </div>
+        </form>
+
+        <p class="text-center mt-3">Already have an account? <a href="{{ url_for('login_page') }}">Log in here</a></p>
+        <p id="errorMessage" class="text-danger"></p>
+    </div>
+</div>
+
+<script>
+document.getElementById("signupForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const signupBtn = document.getElementById("signupBtn");
+    const loading = document.getElementById("loading");
+    const errorMessage = document.getElementById("errorMessage");
+
+    // Show loading animation and disable button
+    signupBtn.disabled = true;
+    loading.style.display = "block";
+    errorMessage.innerText = "";
+
+    fetch("/api/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+        if (data.status === "success") {
+            window.location.href = data.redirect;  // ✅ Redirects to OTP verification page
+        } else {
+            errorMessage.innerText = "❌ " + data.message;
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        errorMessage.innerText = "❌ An error occurred. Please try again.";
+    })
+    .finally(() => {
+        signupBtn.disabled = false;
+        loading.style.display = "none";
+    });
+});
+</script>
+{% endblock %}
